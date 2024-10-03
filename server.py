@@ -2,6 +2,7 @@ from PIL import Image, Image
 from flask import Flask,send_file,request
 import random
 import os
+app =  Flask(__name__)
 
 def load_sprites(folder):
     sprites = {}
@@ -55,3 +56,14 @@ def save_fused_pokemon(pokemon1, pokemon2, save_path):
         fused_image.save(save_path)
     return fused_image
 
+@app.route('/fuse')
+def fuse_pokemon_route():
+    pokemon1 = request.args.get('p1')
+    pokemon2 = request.args.get('p2')
+    save_path = "fused_image.png"
+    fused_image = fuse_pokemon(pokemon1, pokemon2)
+    fused_image.save(save_path)
+    return send_file(save_path, mimetype='image/png')
+
+if __name__ == '__main__':
+    app.run
